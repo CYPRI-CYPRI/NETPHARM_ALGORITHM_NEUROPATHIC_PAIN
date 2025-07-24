@@ -35,28 +35,28 @@
       display: block;
       margin-bottom: 0.5cm;
     }
-
+    .references {
+      font-size: 10px;
+      margin-top: 40px;
+      color: #333;
+    }
     @media (max-width: 600px) {
       body {
         padding: 15px;
       }
-
       h1 {
         font-size: 20px;
       }
-
       #logo {
         height: 2.5cm;
         width: 2.5cm;
         display: block;
         margin: 0 auto 10px;
       }
-
       .box {
         padding: 15px;
         font-size: 14px;
       }
-
       select, label {
         font-size: 14px;
         width: 100%;
@@ -102,17 +102,25 @@
     <div id="recommendation" style="margin-top: 20px;"></div>
   </div>
 
+  <div class="references">
+    <strong>Guideline References:</strong><br>
+    EFNS 2010 – Attal N, Cruccu G, Baron R, Haanpää M, Hansson P, Jensen TS, Nurmikko T. EFNS guidelines on the pharmacological treatment of neuropathic pain: 2010 revision. <em>Eur J Neurol.</em> 2010 Sep;17(9):1113-e88. doi:10.1111/j.1468-1331.2010.02999.x. PMID: 20402746.<br><br>
+    NICE CG173 – National Institute for Health and Care Excellence. Neuropathic pain in adults: pharmacological management in non-specialist settings [CG173]. London: NICE; 2013 [updated 2020 Dec]. Available from: https://www.nice.org.uk/guidance/cg173<br><br>
+    CPS 2022 – Mu A, Weinberg E, Moulin DE, Clarke H. Pharmacologic management of chronic neuropathic pain: Review of the Canadian Pain Society consensus statement. <em>Can Fam Physician.</em> 2022 Nov;68(11):844–50.<br><br>
+    AAN 2022 – Price R, Smith D, Franklin GM, Gronseth G, Pignone M, David WS, et al. Oral and topical treatment of painful diabetic polyneuropathy: Practice guideline update summary. <em>Neurology.</em> 2022 Jan 4;98(1):31–43. doi:10.1212/WNL.0000000000013038.
+  </div>
+
   <script>
     const drugOptions = {
       diabetic: [
-        "Amitriptyline (NICE)",
-        "Duloxetine (EFNS, NICE, CPS)",
-        "Venlafaxine (EFNS, NICE)",
+        "Amitriptyline (EFNS, NICE, AAN, CPS)",
+        "Duloxetine (EFNS, NICE, AAN, CPS)",
+        "Venlafaxine (EFNS, NICE, AAN, CPS)",
         "Gabapentin (EFNS, AAN, CPS)",
         "Pregabalin (EFNS, NICE, AAN, CPS)"
       ],
       postherpetic: [
-        "Amitriptyline (NICE, CPS)",
+        "Amitriptyline (EFNS, NICE, CPS)",
         "Duloxetine (NICE)",
         "Venlafaxine (NICE)",
         "Gabapentin (EFNS, CPS)",
