@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm for Co-analgesic Selection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .hidden {
+      display: none;
+    }
+    .box {
+      margin-top: 20px;
+      padding: 15px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background-color: #f2f2f2;
+    }
+    select, button {
+      margin-top: 10px;
+      padding: 6px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Algorithm for Co-analgesic Selection in Frail Older Adults</h1>
 
+  <label for="painType">Select type of neuropathic pain:</label>
+  <select id="painType" onchange="showTreatmentOptions()">
+    <option value="">-- Choose --</option>
+    <option value="diabetic">Diabetic / Postherpetic / Central Pain</option>
+    <option value="trigeminal">Trigeminal Neuralgia</option>
+    <option value="fibromyalgia">Fibromyalgia</option>
+    <option value="poststroke">Post-stroke Central Pain</option>
+  </select>
+
+  <div id="treatmentBox" class="box hidden">
+    <div id="treatmentChoices"></div>
+  </div>
+
+  <div id="comorbidityBox" class="box hidden">
+    <label for="comorbidity">Select comorbidity to refine recommendation:</label><br>
+    <select id="comorbidity" onchange="showRecommendation()">
+      <option value="">-- Choose --</option>
+      <option value="renal">Renal Impairment</option>
+      <option value="hepatic">Hepatic Impairment</option>
+      <option value="cardiac">Heart Failure</option>
+      <option value="frailty">Frailty Syndrome</option>
+    </select>
+    <div id="recommendation" style="margin-top: 15px;"></div>
+  </div>
+
+  <script>
+    function showTreatmentOptions() {
+      const painType = document.getElementById('painType').value;
+      const treatmentBox = document.getElementById('treatmentBox');
+      const treatmentChoices = document.getElementById('treatmentChoices');
+      const comorbidityBox = document.getElementById('comorbidityBox');
+      document.getElementById('recommendation').innerHTML = '';
+      document.getElementById('comorbidity').value = '';
+      comorbidityBox.classList.add('hidden');
+
+      let html = '';
+
+      if (painType === 'diabetic') {
+        html = `<strong>1st choice:</strong> Duloxetine<br><strong>2nd choice:</strong> Pregabalin or Gabapentin`;
+      } else if (painType === 'trigeminal') {
+        html = `<strong>1st choice:</strong> Carbamazepine<br><strong>2nd choice:</strong> Gabapentin`;
+      } else if (painType === 'fibromyalgia') {
+        html = `<strong>1st choice:</strong> Duloxetine<br><strong>2nd choice:</strong> Amitriptyline`;
+      } else if (painType === 'poststroke') {
+        html = `<strong>1st choice:</strong> Amitriptyline<br><strong>2nd choice:</strong> Duloxetine`;
+      }
+
+      if (html !== '') {
+        treatmentChoices.innerHTML = html;
+        treatmentBox.classList.remove('hidden');
+        comorbidityBox.classList.remove('hidden');
+      }
+    }
+
+    function showRecommendation() {
+      const drugMap = {
+        'duloxetine': {
+          renal: 'Avoid if CrCl < 30 ml/min.',
+          hepatic: 'Contraindicated in hepatic impairment (Child-Pugh B/C).',
+          cardiac: 'Generally safe, monitor orthostatic hypotension.',
+          frailty: 'Start at 30 mg daily, slow titration.'
+        },
+        'gabapentin': {
+          renal: 'Dose adjust if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
+          hepatic: 'Safe, not hepatically metabolized.',
+          cardiac: 'Use with caution due to fluid retention risk.',
+          frailty: 'Start low (e.g., 100 mg), slow titration.'
+        },
+        'pregabalin': {
+          renal: 'Dose adjust if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
+          hepatic: 'Safe in isolated hepatic impairment.',
+          cardiac: 'May cause fluid retention. Caution in heart failure.',
+          frailty: 'Start at 25 mg, increase slowly.'
+        },
+        'amitriptyline': {
+          renal: 'Caution in severe impairment.',
+          hepatic: 'Avoid in moderate to severe hepatic impairment.',
+          cardiac: 'Risk of QT prolongation and arrhythmias.',
+          frailty: 'Avoid if possible. Strong anticholinergic effects.'
+        },
+        'carbamazepine': {
+          renal: 'Caution in CKD. Risk of SIADH and hyponatremia.',
+          hepatic: 'Contraindicated in hepatic failure.',
+          cardiac: 'Avoid in conduction disorders.',
+          frailty: 'Start low, monitor sodium and cognitive side effects.'
+        }
+      };
+
+      const painType = document.getElementById('painType').value;
+      const comorb = document.getElementById('comorbidity').value;
+
+      let mainDrug = '';
+      if (painType === 'diabetic') mainDrug = 'duloxetine';
+      else if (painType === 'trigeminal') mainDrug = 'carbamazepine';
+      else if (painType === 'fibromyalgia') mainDrug = 'duloxetine';
+      else if (painType === 'poststroke') mainDrug = 'amitriptyline';
+
+      const text = drugMap[mainDrug][comorb];
+      document.getElementById('recommendation').innerHTML = `<strong>Recommendation for ${mainDrug}:</strong><br>${text}`;
+    }
+  </script>
+</body>
+</html>
