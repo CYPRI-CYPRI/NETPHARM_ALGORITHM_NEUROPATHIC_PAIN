@@ -40,7 +40,7 @@
 
   <div class="box">
     <label><strong>1. Select type of neuropathic pain:</strong></label><br>
-    <select id="painType" onchange="showTreatmentOptions()">
+    <select id="painType" onchange="showMedications()">
       <option value="">-- Choose --</option>
       <option value="diabetic">Diabetic neuropathy</option>
       <option value="postherpetic">Postherpetic neuropathy</option>
@@ -48,9 +48,9 @@
       <option value="central">Central pain</option>
     </select>
 
-    <div id="treatmentBox" style="margin-top: 20px; display: none;">
-      <label><strong>2. Recommended medications (based on guidelines):</strong></label><br>
-      <ul id="treatmentList"></ul>
+    <div id="medicationsBox" style="margin-top: 20px; display: none;">
+      <label><strong>2. Select recommended medication:</strong></label><br>
+      <select id="medication" onchange="showComorbidities()"></select>
     </div>
 
     <div id="comorbidityBox" style="margin-top: 20px; display: none;">
@@ -68,59 +68,70 @@
   </div>
 
   <script>
-    function showTreatmentOptions() {
+    const drugOptions = {
+      diabetic: [
+        "Duloxetine (EFNS, NICE)",
+        "Gabapentin (EFNS)",
+        "Pregabalin (EFNS)",
+        "TCA (EFNS)",
+        "Venlafaxine (EFNS)"
+      ],
+      postherpetic: [
+        "Gabapentin (EFNS)",
+        "Pregabalin (EFNS)",
+        "TCA (EFNS)",
+        "Lidocaine plasters (EFNS)"
+      ],
+      trigeminal: [
+        "Carbamazepine (EFNS, NICE)"
+      ],
+      central: [
+        "Gabapentin (EFNS)",
+        "Pregabalin (EFNS)",
+        "TCA (EFNS)"
+      ]
+    };
+
+    function showMedications() {
       const painType = document.getElementById('painType').value;
-      const treatmentBox = document.getElementById('treatmentBox');
-      const treatmentList = document.getElementById('treatmentList');
-      treatmentList.innerHTML = '';
+      const medicationBox = document.getElementById('medicationsBox');
+      const medicationSelect = document.getElementById('medication');
+      const comorbidityBox = document.getElementById('comorbidityBox');
+      const recommendation = document.getElementById('recommendation');
 
-      const treatments = {
-        diabetic: [
-          "Duloxetine (EFNS, NICE)",
-          "Gabapentin (EFNS)",
-          "Pregabalin (EFNS)",
-          "TCA (EFNS)",
-          "Venlafaxine (EFNS)"
-        ],
-        postherpetic: [
-          "Gabapentin (EFNS)",
-          "Pregabalin (EFNS)",
-          "TCA (EFNS)",
-          "Lidocaine plasters (EFNS)"
-        ],
-        trigeminal: [
-          "Carbamazepine (EFNS, NICE)"
-        ],
-        central: [
-          "Gabapentin (EFNS)",
-          "Pregabalin (EFNS)",
-          "TCA (EFNS)"
-        ]
-      };
+      medicationSelect.innerHTML = '<option value="">-- Choose --</option>';
+      recommendation.innerHTML = '';
+      comorbidityBox.style.display = 'none';
 
-      if (treatments[painType]) {
-        treatments[painType].forEach(drug => {
-          const li = document.createElement('li');
-          li.textContent = drug;
-          treatmentList.appendChild(li);
+      if (drugOptions[painType]) {
+        drugOptions[painType].forEach(drug => {
+          const option = document.createElement('option');
+          option.textContent = drug;
+          option.value = drug.toLowerCase().split(' ')[0];
+          medicationSelect.appendChild(option);
         });
-        treatmentBox.style.display = 'block';
-        document.getElementById('comorbidityBox').style.display = 'block';
-        document.getElementById('recommendation').innerHTML = '';
+        medicationBox.style.display = 'block';
+      } else {
+        medicationBox.style.display = 'none';
       }
     }
 
+    function showComorbidities() {
+      document.getElementById('comorbidityBox').style.display = 'block';
+      document.getElementById('recommendation').innerHTML = '';
+    }
+
     function showRecommendation() {
-      const painType = document.getElementById('painType').value;
+      const med = document.getElementById('medication').value;
       const comorbidity = document.getElementById('comorbidity').value;
       let text = '';
 
-      if (painType === 'trigeminal' && comorbidity === 'renal') {
-        text = '<strong>Recommendation for carbamazepine:</strong><br>Caution – monitor sodium and renal function.';
-      } else if (painType === 'diabetic' && comorbidity === 'hepatic') {
-        text = '<strong>Recommendation for duloxetine:</strong><br>Use with caution or avoid in severe hepatic impairment.';
-      } else if (painType === 'central' && comorbidity === 'renal') {
-        text = '<strong>Recommendation for gabapentin/pregabalin:</strong><br>Adjust dose in renal impairment.';
+      if (med === 'carbamazepine' && comorbidity === 'renal') {
+        text = '<strong>Recommendation:</strong> Monitor sodium and renal function.';
+      } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
+        text = '<strong>Recommendation:</strong> Use with caution or avoid in severe hepatic impairment.';
+      } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
+        text = '<strong>Recommendation:</strong> Adjust dose in renal impairment.';
       } else {
         text = 'No specific recommendation available for this combination.';
       }
