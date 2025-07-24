@@ -19,6 +19,13 @@
       margin-top: 20px;
       border-radius: 10px;
     }
+    .recommendation-box {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid #ccc;
+    }
     select, label, input[type=checkbox] {
       font-size: 16px;
     }
@@ -178,15 +185,17 @@
       checkboxes.forEach(cb => {
         if (cb.checked) {
           const comorbidity = cb.value;
+          let content = '';
           if (med === 'carbamazepine' && comorbidity === 'renal') {
-            output += '<p><strong>Renal Impairment:</strong> Monitor sodium and renal function.</p>';
+            content = 'Monitor sodium and renal function.';
           } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-            output += '<p><strong>Hepatic Impairment:</strong> Use with caution or avoid in severe hepatic impairment.</p>';
+            content = 'Use with caution or avoid in severe hepatic impairment.';
           } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-            output += '<p><strong>Renal Impairment:</strong> Adjust dose in renal impairment.</p>';
+            content = 'Adjust dose in renal impairment.';
           } else {
-            output += `<p><strong>${cb.nextSibling.textContent.trim()}:</strong> No specific recommendation available for this combination.</p>`;
+            content = 'No specific recommendation available for this combination.';
           }
+          output += `<div class='recommendation-box'><strong>${cb.nextSibling.textContent.trim()}:</strong> ${content}</div>`;
         }
       });
       document.getElementById('recommendation').innerHTML = output;
