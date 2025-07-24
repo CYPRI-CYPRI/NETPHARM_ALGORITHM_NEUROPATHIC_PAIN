@@ -13,7 +13,7 @@
       color: #0a2f66;
     }
     .box {
-      background: #8c7bbd; /* modrofialová, více do modra */
+      background: #7b6fb2; /* tmavší modrofialová z loga */
       border: 2px solid #ccc;
       padding: 20px;
       margin-top: 20px;
@@ -36,8 +36,8 @@
   <h1>Optimising the Use of Psychotropic Coanalgesics in Frail Older Adults<br>
   with Hepatorenal and/or Cardiorenal Syndromes and Neuropathic Pain</h1>
   <p><em>A Clinical Algorithm Developed Under the NETPHARM Project</em></p>
-  <p style="max-width: 750px">This project was supported by the NETPHARM project (New Technologies for Translational Research in Pharmaceutical Sciences).</p>
-  <p style="max-width: 750px">Project ID CZ.02.01.01/00/22_008/0004607, co-funded by the European Union.</p>
+  <p>This project was supported by the NETPHARM project (New Technologies for Translational Research in Pharmaceutical Sciences).</p>
+  <p>Project ID CZ.02.01.01/00/22_008/0004607, co-funded by the European Union.</p>
 
   <div class="box">
     <label><strong>1. Select type of neuropathic pain:</strong></label><br>
@@ -70,75 +70,3 @@
 
   <script>
     const drugOptions = {
-      diabetic: [
-        "Duloxetine (EFNS, NICE)",
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Venlafaxine (EFNS)"
-      ],
-      postherpetic: [
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Lidocaine plasters (EFNS)"
-      ],
-      trigeminal: [
-        "Carbamazepine (EFNS, NICE)"
-      ],
-      central: [
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)"
-      ]
-    };
-
-    function showMedications() {
-      const painType = document.getElementById('painType').value;
-      const medicationBox = document.getElementById('medicationsBox');
-      const medicationSelect = document.getElementById('medication');
-      const comorbidityBox = document.getElementById('comorbidityBox');
-      const recommendation = document.getElementById('recommendation');
-
-      medicationSelect.innerHTML = '<option value="">-- Choose --</option>';
-      recommendation.innerHTML = '';
-      comorbidityBox.style.display = 'none';
-
-      if (drugOptions[painType]) {
-        drugOptions[painType].forEach(drug => {
-          const option = document.createElement('option');
-          option.textContent = drug;
-          option.value = drug.toLowerCase().split(' ')[0];
-          medicationSelect.appendChild(option);
-        });
-        medicationBox.style.display = 'block';
-      } else {
-        medicationBox.style.display = 'none';
-      }
-    }
-
-    function showComorbidities() {
-      document.getElementById('comorbidityBox').style.display = 'block';
-      document.getElementById('recommendation').innerHTML = '';
-    }
-
-    function showRecommendation() {
-      const med = document.getElementById('medication').value;
-      const comorbidity = document.getElementById('comorbidity').value;
-      let text = '';
-
-      if (med === 'carbamazepine' && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Monitor sodium and renal function.';
-      } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-        text = '<strong>Recommendation:</strong> Use with caution or avoid in severe hepatic impairment.';
-      } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Adjust dose in renal impairment.';
-      } else {
-        text = 'No specific recommendation available for this combination.';
-      }
-
-      document.getElementById('recommendation').innerHTML = text;
-    }
-  </script>
-</body>
-</html>
