@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NETPHARM Algorithm – Neuropathic Pain</title>
+  <title>Algorithm for Co-analgesic Selection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-  <h1>NETPHARM Algorithm for Neuropathic Pain</h1>
+  <h1>Algorithm for Co-analgesic Selection in Frail Older Adults</h1>
 
   <label for="painType"><strong>1. Select type of neuropathic pain:</strong></label>
   <select id="painType" onchange="showTreatmentOptions()">
@@ -85,6 +85,9 @@
         treatmentChoices.innerHTML = html;
         treatmentBox.classList.remove('hidden');
         comorbidityBox.classList.remove('hidden');
+      } else {
+        treatmentBox.classList.add('hidden');
+        comorbidityBox.classList.add('hidden');
       }
     }
 
@@ -92,33 +95,33 @@
       const drugMap = {
         'duloxetine': {
           renal: 'Avoid if CrCl < 30 ml/min.',
-          hepatic: 'Contraindicated in hepatic impairment (Child-Pugh B/C).',
-          cardiac: 'Generally safe, monitor orthostatic hypotension.',
-          frailty: 'Start at 30 mg daily, slow titration.'
+          hepatic: 'Contraindicated in moderate-to-severe hepatic impairment.',
+          cardiac: 'Generally safe, monitor for orthostatic hypotension.',
+          frailty: 'Start at 30 mg daily, titrate slowly.'
         },
         'gabapentin': {
-          renal: 'Dose adjust if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
-          hepatic: 'Safe, not hepatically metabolized.',
-          cardiac: 'Use with caution due to fluid retention risk.',
-          frailty: 'Start low (e.g., 100 mg), slow titration.'
+          renal: 'Adjust dose if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
+          hepatic: 'Safe – not hepatically metabolized.',
+          cardiac: 'Use caution: risk of fluid retention.',
+          frailty: 'Start low (e.g., 100 mg), titrate slowly.'
         },
         'pregabalin': {
-          renal: 'Dose adjust if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
-          hepatic: 'Safe in isolated hepatic impairment.',
-          cardiac: 'May cause fluid retention. Caution in heart failure.',
-          frailty: 'Start at 25 mg, increase slowly.'
+          renal: 'Adjust dose if CrCl < 60 ml/min. Avoid if < 15 ml/min.',
+          hepatic: 'Safe in mild to moderate impairment.',
+          cardiac: 'Risk of edema – caution in heart failure.',
+          frailty: 'Start at 25 mg, increase gradually.'
         },
         'amitriptyline': {
-          renal: 'Caution in severe impairment.',
-          hepatic: 'Avoid in moderate to severe hepatic impairment.',
-          cardiac: 'Risk of QT prolongation and arrhythmias.',
-          frailty: 'Avoid if possible. Strong anticholinergic effects.'
+          renal: 'Use caution in severe renal impairment.',
+          hepatic: 'Avoid in moderate to severe hepatic dysfunction.',
+          cardiac: 'QT prolongation risk – monitor ECG.',
+          frailty: 'Avoid or use with extreme caution due to anticholinergic effects.'
         },
         'carbamazepine': {
-          renal: 'Caution in CKD. Risk of SIADH and hyponatremia.',
+          renal: 'Caution – monitor sodium and renal function.',
           hepatic: 'Contraindicated in hepatic failure.',
-          cardiac: 'Avoid in conduction disorders.',
-          frailty: 'Start low, monitor sodium and cognitive side effects.'
+          cardiac: 'Avoid in conduction disorders or arrhythmias.',
+          frailty: 'Start low, monitor for dizziness and hyponatremia.'
         }
       };
 
@@ -131,10 +134,15 @@
       else if (painType === 'fibromyalgia') mainDrug = 'duloxetine';
       else if (painType === 'poststroke') mainDrug = 'amitriptyline';
 
-      const text = drugMap[mainDrug][comorb];
-      document.getElementById('recommendation').innerHTML =
-        `<strong>Recommendation for ${mainDrug}:</strong><br>${text}`;
+      if (mainDrug && comorb) {
+        const text = drugMap[mainDrug][comorb];
+        document.getElementById('recommendation').innerHTML =
+          `<strong>Recommendation for ${mainDrug}:</strong><br>${text}`;
+      } else {
+        document.getElementById('recommendation').innerHTML = '';
+      }
     }
   </script>
+
 </body>
 </html>
