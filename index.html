@@ -13,7 +13,7 @@
       color: #0a2f66;
     }
     .box {
-      background: #e1bee7;
+      background: #eec9e7;
       border: 2px solid #ccc;
       padding: 20px;
       margin-top: 20px;
@@ -83,7 +83,7 @@
       <option value="central">Central pain</option>
     </select>
 
-    <div id="medicationsBox" style="margin-top: 20px; display: none;">
+    <div id="medicationsBox" style="margin-top: 0.5cm; display: none;">
       <label><strong>2. Select recommended medication:</strong></label><br>
       <select id="medication" onchange="showComorbidities()"></select>
     </div>
@@ -105,25 +105,28 @@
   <script>
     const drugOptions = {
       diabetic: [
-        "Duloxetine (EFNS, NICE)",
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Venlafaxine (EFNS)"
+        "Amitriptyline (NICE)",
+        "Duloxetine (EFNS, NICE, CPS)",
+        "Venlafaxine (EFNS, NICE)",
+        "Gabapentin (EFNS, AAN, CPS)",
+        "Pregabalin (EFNS, NICE, AAN, CPS)"
       ],
       postherpetic: [
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Lidocaine plasters (EFNS)"
+        "Amitriptyline (NICE, CPS)",
+        "Duloxetine (NICE)",
+        "Venlafaxine (NICE)",
+        "Gabapentin (EFNS, CPS)",
+        "Pregabalin (EFNS, NICE, CPS)"
       ],
       trigeminal: [
-        "Carbamazepine (EFNS, NICE)"
+        "Carbamazepine (EFNS, NICE, CPS)"
       ],
       central: [
+        "Amitriptyline (EFNS, NICE)",
+        "Duloxetine (NICE)",
+        "Venlafaxine (NICE)",
         "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)"
+        "Pregabalin (EFNS, NICE)"
       ]
     };
 
