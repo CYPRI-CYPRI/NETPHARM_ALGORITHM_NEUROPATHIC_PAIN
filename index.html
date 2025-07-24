@@ -13,7 +13,7 @@
       color: #0a2f66;
     }
     .box {
-      background: #c38ecf; /* tmavší odstín gradientu loga */
+      background: #a78ac4; /* fialovomodrá z loga */
       border: 2px solid #ccc;
       padding: 20px;
       margin-top: 20px;
@@ -59,85 +59,4 @@
         <option value="">-- Choose --</option>
         <option value="renal">Renal Impairment</option>
         <option value="hepatic">Hepatic Impairment</option>
-        <option value="cardiac">Heart Failure</option>
-        <option value="frailty">Frailty Syndrome</option>
-      </select>
-    </div>
-
-    <div id="recommendation" style="margin-top: 20px;"></div>
-  </div>
-
-  <script>
-    const drugOptions = {
-      diabetic: [
-        "Duloxetine (EFNS, NICE)",
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Venlafaxine (EFNS)"
-      ],
-      postherpetic: [
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)",
-        "Lidocaine plasters (EFNS)"
-      ],
-      trigeminal: [
-        "Carbamazepine (EFNS, NICE)"
-      ],
-      central: [
-        "Gabapentin (EFNS)",
-        "Pregabalin (EFNS)",
-        "TCA (EFNS)"
-      ]
-    };
-
-    function showMedications() {
-      const painType = document.getElementById('painType').value;
-      const medicationBox = document.getElementById('medicationsBox');
-      const medicationSelect = document.getElementById('medication');
-      const comorbidityBox = document.getElementById('comorbidityBox');
-      const recommendation = document.getElementById('recommendation');
-
-      medicationSelect.innerHTML = '<option value="">-- Choose --</option>';
-      recommendation.innerHTML = '';
-      comorbidityBox.style.display = 'none';
-
-      if (drugOptions[painType]) {
-        drugOptions[painType].forEach(drug => {
-          const option = document.createElement('option');
-          option.textContent = drug;
-          option.value = drug.toLowerCase().split(' ')[0];
-          medicationSelect.appendChild(option);
-        });
-        medicationBox.style.display = 'block';
-      } else {
-        medicationBox.style.display = 'none';
-      }
-    }
-
-    function showComorbidities() {
-      document.getElementById('comorbidityBox').style.display = 'block';
-      document.getElementById('recommendation').innerHTML = '';
-    }
-
-    function showRecommendation() {
-      const med = document.getElementById('medication').value;
-      const comorbidity = document.getElementById('comorbidity').value;
-      let text = '';
-
-      if (med === 'carbamazepine' && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Monitor sodium and renal function.';
-      } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-        text = '<strong>Recommendation:</strong> Use with caution or avoid in severe hepatic impairment.';
-      } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Adjust dose in renal impairment.';
-      } else {
-        text = 'No specific recommendation available for this combination.';
-      }
-
-      document.getElementById('recommendation').innerHTML = text;
-    }
-  </script>
-</body>
-</html>
+        <option value="cardiac">H
