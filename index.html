@@ -13,7 +13,7 @@
       color: #0a2f66;
     }
     .box {
-      background: #6b5da8;
+      background: #e1bee7;
       border: 2px solid #ccc;
       padding: 20px;
       margin-top: 20px;
@@ -27,6 +27,13 @@
       width: 4cm;
       vertical-align: middle;
       margin-right: 10px;
+    }
+    #painType {
+      margin-top: 0.5cm;
+    }
+    label[for="painType"] {
+      display: block;
+      margin-bottom: 0.5cm;
     }
 
     @media (max-width: 600px) {
@@ -67,7 +74,7 @@
   <p>Project ID CZ.02.01.01/00/22_008/0004607, co-funded by the European Union.</p>
 
   <div class="box">
-    <label><strong>1. Select type of neuropathic pain:</strong></label><br>
+    <label for="painType"><strong>1. Select type of neuropathic pain:</strong></label>
     <select id="painType" onchange="showMedications()">
       <option value="">-- Choose --</option>
       <option value="diabetic">Diabetic neuropathy</option>
