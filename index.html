@@ -1,124 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NETPHARM Neuropathic Pain Algorithm</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f9f9f9;
-      color: #1f2d3d;
-      max-width: 900px;
-    }
-    h1 {
-      color: #0c2d64;
-      font-size: 26px;
-    }
-    .logo {
-      width: 100px;
-    }
-    .dedication {
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    .box {
-      background-color: #ffffff;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    label, select {
-      font-size: 16px;
-      display: block;
-      margin-bottom: 10px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>NETPHARM Algorithm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f5f6f7;
+        }
+        h1 {
+            color: #0a2f66;
+        }
+        .box {
+            background: white;
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        select, label {
+            font-size: 16px;
+        }
+        #logo {
+            height: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
+    <img src="netpharm_logo.png" id="logo" alt="NETPHARM Logo">
+    <span style="font-size:18px; font-weight:bold;">NETPHARM Logo</span>
 
-  <img src="netpharm_logo.png" alt="NETPHARM Logo" class="logo">
+    <h1>Optimising the Use of Psychotropic Coanalgesics in Frail Older Adults<br>with Hepatorenal and/or Cardiorenal Syndromes and Neuropathic Pain</h1>
+    <p><em>A Clinical Algorithm Developed Under the NETPHARM Project</em></p>
+    <p style="max-width: 750px">This project was supported by the NETPHARM project (New Technologies for Translational Research in Pharmaceutical Sciences), project ID CZ.02.01.01/00/22_008/0004607, co-funded by the European Union.</p>
 
-  <h1>Optimising the Use of Psychotropic Coanalgesics in Frail Older Adults with Hepatorenal and/or Cardiorenal Syndromes and Neuropathic Pain</h1>
-  <p><i>A Clinical Algorithm Developed Under the NETPHARM Project</i></p>
+    <div class="box">
+        <label><strong>1. Select type of neuropathic pain:</strong></label><br>
+        <select id="painType" onchange="showTreatmentOptions()">
+            <option value="">-- Choose --</option>
+            <option value="diabetic">Diabetic neuropathy</option>
+            <option value="postherpetic">Postherpetic neuropathy</option>
+            <option value="trigeminal">Trigeminal neuralgia</option>
+        </select>
 
-  <div class="dedication">
-    This project was supported by the NETPHARM project (New Technologies for Translational Research in Pharmaceutical Sciences), project ID CZ.02.01.01/00/22_008/0004607, co-funded by the European Union.
-  </div>
+        <div id="treatmentBox" style="margin-top: 20px; display: none;">
+            <label><strong>2. Select treatment option:</strong></label><br>
+            <select id="treatmentChoice" onchange="showComorbidityBox()">
+                <!-- dynamically inserted -->
+            </select>
+        </div>
 
-  <div class="box">
-    <label for="painType"><b>1. Select type of neuropathic pain:</b></label>
-    <select id="painType" onchange="showTreatmentOptions()">
-      <option value="">-- Choose --</option>
-      <option value="diabetic">Diabetic neuropathy</option>
-      <option value="postherpetic">Postherpetic neuropathy</option>
-      <option value="trigeminal">Trigeminal neuralgia</option>
-      <option value="central">Central pain</option>
-    </select>
-    <div id="treatmentChoices"></div>
-  </div>
+        <div id="comorbidityBox" style="margin-top: 20px; display: none;">
+            <label><strong>3. Select comorbidity:</strong></label><br>
+            <select id="comorbidity" onchange="showRecommendation()">
+                <option value="">-- Choose --</option>
+                <option value="renal">Renal Impairment</option>
+                <option value="hepatic">Hepatic Impairment</option>
+                <option value="cardiac">Heart Failure</option>
+                <option value="frailty">Frailty Syndrome</option>
+            </select>
+        </div>
 
-  <div id="comorbidityBox" class="box hidden">
-    <label for="comorbidity"><b>2. Select comorbidity:</b></label>
-    <select id="comorbidity" onchange="showRecommendation()">
-      <option value="">-- Choose --</option>
-      <option value="renal">Renal Impairment</option>
-      <option value="hepatic">Hepatic Impairment</option>
-      <option value="cardiac">Heart Failure</option>
-      <option value="frailty">Frailty Syndrome</option>
-    </select>
-    <div id="recommendation" style="margin-top: 15px;"></div>
-  </div>
+        <div id="recommendation" style="margin-top: 20px;"></div>
+    </div>
 
-  <script>
-    function showTreatmentOptions() {
-      const painType = document.getElementById('painType').value;
-      const treatmentBox = document.getElementById('treatmentChoices');
-      const comorbidityBox = document.getElementById('comorbidityBox');
-      const recommendationBox = document.getElementById('recommendation');
+<script>
+function showTreatmentOptions() {
+    const painType = document.getElementById('painType').value;
+    const treatmentBox = document.getElementById('treatmentBox');
+    const treatmentChoice = document.getElementById('treatmentChoice');
+    treatmentChoice.innerHTML = '';
 
-      treatmentBox.innerHTML = '';
-      recommendationBox.innerHTML = '';
-      document.getElementById('comorbidity').value = '';
-      comorbidityBox.classList.add('hidden');
-
-      if (!painType) return;
-
-      let html = '';
-      if (painType === 'diabetic') {
-        html = '<strong>1st choice:</strong> Duloxetine (EFNS, NICE)<br><strong>2nd choice:</strong> Gabapentin (EFNS)';
-      } else if (painType === 'postherpetic') {
-        html = '<strong>1st choice:</strong> Gabapentin (EFNS)<br><strong>2nd choice:</strong> Pregabalin (EFNS)';
-      } else if (painType === 'trigeminal') {
-        html = '<strong>1st choice:</strong> Carbamazepine (EFNS, NICE)';
-      } else if (painType === 'central') {
-        html = '<strong>1st choice:</strong> Gabapentin (EFNS)<br><strong>2nd choice:</strong> Pregabalin (EFNS)';
-      }
-
-      treatmentBox.innerHTML = html;
-      comorbidityBox.classList.remove('hidden');
+    if (painType === 'diabetic') {
+        treatmentChoice.innerHTML = `
+            <option value="duloxetine">Duloxetine (EFNS, NICE)</option>
+            <option value="gabapentin">Gabapentin (EFNS)</option>
+        `;
+    } else if (painType === 'postherpetic') {
+        treatmentChoice.innerHTML = `
+            <option value="gabapentin">Gabapentin (EFNS)</option>
+            <option value="pregabalin">Pregabalin (EFNS)</option>
+        `;
+    } else if (painType === 'trigeminal') {
+        treatmentChoice.innerHTML = `
+            <option value="carbamazepine">Carbamazepine (EFNS, NICE)</option>
+        `;
     }
 
-    function showRecommendation() {
-      const comorbidity = document.getElementById('comorbidity').value;
-      const painType = document.getElementById('painType').value;
-      let recommendation = '';
+    treatmentBox.style.display = 'block';
+    document.getElementById('comorbidityBox').style.display = 'none';
+    document.getElementById('recommendation').innerHTML = '';
+}
 
-      if (!comorbidity) return;
+function showComorbidityBox() {
+    document.getElementById('comorbidityBox').style.display = 'block';
+    document.getElementById('recommendation').innerHTML = '';
+}
 
-      if (painType === 'trigeminal' && comorbidity === 'renal') {
-        recommendation = '<strong>Recommendation for carbamazepine:</strong><br>Caution – monitor sodium and renal function.';
-      }
-      // You can expand with more if...else ifs or a lookup table
+function showRecommendation() {
+    const treatment = document.getElementById('treatmentChoice').value;
+    const comorbidity = document.getElementById('comorbidity').value;
+    let text = '';
 
-      document.getElementById('recommendation').innerHTML = recommendation;
+    if (treatment === 'carbamazepine' && comorbidity === 'renal') {
+        text = '<strong>Recommendation for carbamazepine:</strong><br>Caution – monitor sodium and renal function.';
+    } else if (treatment === 'gabapentin' && comorbidity === 'renal') {
+        text = '<strong>Recommendation for gabapentin:</strong><br>Adjust dose in renal impairment.';
+    } else if (treatment === 'duloxetine' && comorbidity === 'hepatic') {
+        text = '<strong>Recommendation for duloxetine:</strong><br>Use with caution or avoid in severe hepatic impairment.';
+    } else {
+        text = 'No specific recommendation available for this combination.';
     }
-  </script>
 
+    document.getElementById('recommendation').innerHTML = text;
+}
+</script>
 </body>
 </html>
