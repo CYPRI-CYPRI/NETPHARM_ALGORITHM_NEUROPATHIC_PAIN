@@ -19,7 +19,7 @@
       margin-top: 20px;
       border-radius: 10px;
     }
-    select, label {
+    select, label, input[type=checkbox] {
       font-size: 16px;
     }
     #logo {
@@ -39,6 +39,10 @@
       font-size: 10px;
       margin-top: 40px;
       color: #333;
+    }
+    .checkbox-group label {
+      display: block;
+      margin: 5px 0;
     }
     @media (max-width: 600px) {
       body {
@@ -89,14 +93,14 @@
     </div>
 
     <div id="comorbidityBox" style="margin-top: 20px; display: none;">
-      <label><strong>3. Select comorbidity or patient status:</strong></label><br>
-      <select id="comorbidity" onchange="showRecommendation()">
-        <option value="">-- Choose --</option>
-        <option value="renal">Renal Impairment</option>
-        <option value="hepatic">Hepatic Impairment</option>
-        <option value="cardiac">Heart Failure</option>
-        <option value="frailty">Frailty Syndrome</option>
-      </select>
+      <label><strong>3. Select comorbidities or patient status:</strong></label><br>
+      <div class="checkbox-group">
+        <label><input type="checkbox" value="renal"> Renal Impairment</label>
+        <label><input type="checkbox" value="hepatic"> Hepatic Impairment</label>
+        <label><input type="checkbox" value="cardiac"> Heart Failure</label>
+        <label><input type="checkbox" value="frailty"> Frailty Syndrome</label>
+      </div>
+      <button onclick="showMultipleRecommendations()">Show Recommendations</button>
     </div>
 
     <div id="recommendation" style="margin-top: 20px;"></div>
@@ -167,22 +171,25 @@
       document.getElementById('recommendation').innerHTML = '';
     }
 
-    function showRecommendation() {
+    function showMultipleRecommendations() {
       const med = document.getElementById('medication').value;
-      const comorbidity = document.getElementById('comorbidity').value;
-      let text = '';
-
-      if (med === 'carbamazepine' && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Monitor sodium and renal function.';
-      } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-        text = '<strong>Recommendation:</strong> Use with caution or avoid in severe hepatic impairment.';
-      } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-        text = '<strong>Recommendation:</strong> Adjust dose in renal impairment.';
-      } else {
-        text = 'No specific recommendation available for this combination.';
-      }
-
-      document.getElementById('recommendation').innerHTML = text;
+      const checkboxes = document.querySelectorAll('#comorbidityBox input[type=checkbox]');
+      let output = '';
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          const comorbidity = cb.value;
+          if (med === 'carbamazepine' && comorbidity === 'renal') {
+            output += '<p><strong>Renal Impairment:</strong> Monitor sodium and renal function.</p>';
+          } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
+            output += '<p><strong>Hepatic Impairment:</strong> Use with caution or avoid in severe hepatic impairment.</p>';
+          } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
+            output += '<p><strong>Renal Impairment:</strong> Adjust dose in renal impairment.</p>';
+          } else {
+            output += `<p><strong>${cb.nextSibling.textContent.trim()}:</strong> No specific recommendation available for this combination.</p>`;
+          }
+        }
+      });
+      document.getElementById('recommendation').innerHTML = output;
     }
   </script>
 </body>
