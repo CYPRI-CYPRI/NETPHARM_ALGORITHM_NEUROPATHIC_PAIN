@@ -99,6 +99,7 @@
       <option value="postherpetic">Postherpetic neuropathy</option>
       <option value="trigeminal">Trigeminal neuralgia</option>
       <option value="central">Central pain</option>
+      <!-- ✅ NOVÁ VOLBA -->
       <option value="unspecified">Neuropathic pain – not specified</option>
     </select>
 
@@ -155,6 +156,7 @@
         "Gabapentin (EFNS)",
         "Pregabalin (EFNS, NICE)"
       ],
+      /* ✅ Nový blok – všech šest léčiv */
       unspecified: [
         "Amitriptyline (EFNS, NICE, AAN, CPS)",
         "Duloxetine (EFNS, NICE, AAN, CPS)",
@@ -204,7 +206,7 @@ Gabapentin may be administered provided that renal function is closely monitored
         drugOptions[painType].forEach(drug => {
           const option = document.createElement('option');
           option.textContent = drug;
-          option.value = drug.split(' ')[0].toLowerCase(); // "Gabapentin ..." -> "gabapentin"
+          option.value = drug.split(' ')[0].toLowerCase();
           medicationSelect.appendChild(option);
         });
         medicationBox.style.display = 'block';
