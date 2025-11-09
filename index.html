@@ -20,12 +20,15 @@
       border-radius: 10px;
     }
     .recommendation-box {
-      background: white;
-      padding: 10px 15px;
+      padding: 15px;
       border-radius: 8px;
       margin-top: 15px;
       border: 1px solid #ccc;
+      white-space: pre-wrap;
     }
+    .frailty, .heart, .renal { background-color: #ffc000; }
+    .hepatic { background-color: #92d050; }
+
     select, label, input[type=checkbox] {
       font-size: 16px;
     }
@@ -36,11 +39,11 @@
       margin-right: 10px;
     }
     #painType {
-      margin-top: 0.5cm;
+      margin-top: 0.25cm;
     }
-    label[for="painType"] {
+    label[for="painType"], label[for="medication"] {
       display: block;
-      margin-bottom: 0.5cm;
+      margin-bottom: 0.25cm;
     }
     .references {
       font-size: 10px;
@@ -92,10 +95,12 @@
       <option value="postherpetic">Postherpetic neuropathy</option>
       <option value="trigeminal">Trigeminal neuralgia</option>
       <option value="central">Central pain</option>
+      <!-- NEW OPTION -->
+      <option value="unspecified">Neuropathic pain – not specified</option>
     </select>
 
-    <div id="medicationsBox" style="margin-top: 0.5cm; display: none;">
-      <label><strong>2. Select recommended medication:</strong></label><br>
+    <div id="medicationsBox" style="margin-top: 0.25cm; display: none;">
+      <label for="medication"><strong>2. Select recommended medication:</strong></label>
       <select id="medication" onchange="showComorbidities()"></select>
     </div>
 
@@ -146,7 +151,34 @@
         "Venlafaxine (NICE)",
         "Gabapentin (EFNS)",
         "Pregabalin (EFNS, NICE)"
+      ],
+      // NEW BLOCK – all co-analgesics for "not specified"
+      unspecified: [
+        "Amitriptyline (EFNS, NICE, AAN, CPS)",
+        "Duloxetine (EFNS, NICE, AAN, CPS)",
+        "Venlafaxine (EFNS, NICE, AAN, CPS)",
+        "Gabapentin (EFNS, AAN, CPS)",
+        "Pregabalin (EFNS, NICE, AAN, CPS)",
+        "Carbamazepine (EFNS, NICE, CPS)"
       ]
+    };
+
+    const recommendations = {
+      gabapentin: {
+        renal: `<div class="recommendation-box renal">
+<b>Renal Impairment:</b><br><br><b>Risks:</b> risk of overdose due to cumulation of the drug<br>
+<b>Risk monitoring:</b> monitor renal function regularly<br>
+<b>Dose adjustment:</b><br>
+eGFR ≥80 ml/min: daily dose 900–3600 mg (in 3 daily doses),<br>
+eGFR 50–79 ml/min: 600–1800 mg/day (in 3 daily doses),<br>
+eGFR 30–49 ml/min: 300–900 mg/day (in 3 daily doses),<br>
+eGFR 15–29 ml/min: 150 mg on alternate days – 600 mg/day (in 3 daily doses),<br>
+eGFR <15 ml/min: 150 mg on alternate days – 300 mg/day; reduce daily dose in proportion to creatinine clearance.<br>
+In anuric patients on hemodialysis, an initial dose of 300–400 mg/day is recommended, followed by 200 to 300 mg of gabapentin after every 4 hours of dialysis. On non-dialysis days, gabapentin therapy should not be administered.<br>
+<b>Recommendation:</b> use with caution<br>
+Gabapentin may be administered provided that renal function is closely monitored and appropriate dose adjustments are made, especially when eGFR is below 60 ml/min. This agent should be used with caution in patients showing unstable or progressively declining renal function, AKI, and nephrotic syndrome.
+</div>`
+      }
     };
 
     function showMedications() {
@@ -179,26 +211,18 @@
     }
 
     function showMultipleRecommendations() {
-      const med = document.getElementById('medication').value;
-      const checkboxes = document.querySelectorAll('#comorbidityBox input[type=checkbox]');
-      let output = '';
-      checkboxes.forEach(cb => {
-        if (cb.checked) {
-          const comorbidity = cb.value;
-          let content = '';
-          if (med === 'carbamazepine' && comorbidity === 'renal') {
-            content = 'Monitor sodium and renal function.';
-          } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-            content = 'Use with caution or avoid in severe hepatic impairment.';
-          } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-            content = 'Adjust dose in renal impairment.';
-          } else {
-            content = 'No specific recommendation available for this combination.';
-          }
-          output += `<div class='recommendation-box'><strong>${cb.nextSibling.textContent.trim()}:</strong> ${content}</div>`;
+      const selectedMed = document.getElementById('medication').value;
+      const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+      const recommendationBox = document.getElementById('recommendation');
+      let result = '';
+
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked && recommendations[selectedMed] && recommendations[selectedMed][checkbox.value]) {
+          result += recommendations[selectedMed][checkbox.value];
         }
       });
-      document.getElementById('recommendation').innerHTML = output;
+
+      recommendationBox.innerHTML = result || '<div class="recommendation-box">No recommendation available for this combination.</div>';
     }
   </script>
 </body>
